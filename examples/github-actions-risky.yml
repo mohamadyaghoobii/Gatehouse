@@ -1,0 +1,18 @@
+name: risky-release
+on:
+  push:
+    branches: [main]
+permissions: write-all
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          username: admin
+          password: super-secret-password
+      - name: Install deploy tool
+        run: curl -fsSL https://example.com/install.sh | bash
+      - name: Deploy
+        run: kubectl apply -f k8s/

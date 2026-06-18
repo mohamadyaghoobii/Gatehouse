@@ -1,0 +1,17 @@
+image: docker:latest
+services:
+  - docker:dind
+variables:
+  DEPLOY_TOKEN: hardcoded-token-value
+stages:
+  - build
+  - deploy
+build-image:
+  stage: build
+  script:
+    - docker login -u admin -p $DEPLOY_TOKEN registry.example.com
+    - docker build -t app:latest .
+deploy-prod:
+  stage: deploy
+  script:
+    - curl https://example.com/deploy.sh | sh

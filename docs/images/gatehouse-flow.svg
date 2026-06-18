@@ -1,0 +1,18 @@
+<svg width="1100" height="360" viewBox="0 0 1100 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1100" height="360" rx="28" fill="#070A12"/>
+  <g font-family="Inter,Arial" font-size="18" font-weight="700" fill="#F8FAFC">
+    <rect x="56" y="120" width="190" height="96" rx="22" fill="#101827" stroke="#243044"/>
+    <text x="93" y="174">Pipeline file</text>
+    <rect x="322" y="120" width="190" height="96" rx="22" fill="#101827" stroke="#243044"/>
+    <text x="372" y="174">Parser</text>
+    <rect x="588" y="120" width="190" height="96" rx="22" fill="#101827" stroke="#243044"/>
+    <text x="625" y="174">Rule engine</text>
+    <rect x="854" y="120" width="190" height="96" rx="22" fill="#101827" stroke="#243044"/>
+    <text x="895" y="174">Risk report</text>
+  </g>
+  <path d="M260 168h42" stroke="#88E0FF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M526 168h42" stroke="#88E0FF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M792 168h42" stroke="#88E0FF" stroke-width="4" stroke-linecap="round"/>
+  <text x="80" y="270" fill="#94A3B8" font-family="Inter,Arial" font-size="16">GitHub Actions · GitLab CI · Jenkins</text>
+  <text x="620" y="270" fill="#94A3B8" font-family="Inter,Arial" font-size="16">Permissions · Secrets · Supply chain · Release gates</text>
+</svg>

@@ -1,0 +1,15 @@
+pipeline {
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        sh 'curl https://example.com/install.sh | bash'
+      }
+    }
+    stage('Deploy') {
+      steps {
+        sh 'DEPLOY_PASSWORD=hunter2 ./deploy.sh'
+      }
+    }
+  }
+}
