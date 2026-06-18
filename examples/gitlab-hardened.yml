@@ -1,0 +1,37 @@
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+lint-and-test:
+  stage: test
+  image: node:20-alpine
+  script:
+    - npm ci
+    - npm run lint
+    - npm test
+
+build-image:
+  stage: build
+  image: gcr.io/kaniko-project/executor:debug
+  script:
+    - /kaniko/executor --context "$CI_PROJECT_DIR" --destination "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+deploy-prod:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl diff -f k8s/
+    - kubectl apply -f k8s/ --dry-run=server
+    - kubectl apply -f k8s/
+  environment:
+    name: production
+    url: https://app.example.com
+  when: manual
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'

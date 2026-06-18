@@ -1,0 +1,19 @@
+name: supply-chain
+on: [push]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: some-vendor/setup-tool@master
+      - uses: another-org/publish-action@v1
+      - name: Install CLI
+        run: curl -fsSL https://get.example.com/install.sh | bash
+      - name: Install deps
+        run: pip install https://internal.example.net/packages/tool.tar.gz
+      - name: Build and push image
+        run: |
+          docker build -t registry.example.com/app:latest .
+          docker push registry.example.com/app:latest

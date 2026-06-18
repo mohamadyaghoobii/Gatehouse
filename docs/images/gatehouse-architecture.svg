@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" font-family="Inter, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#070a11"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6ea8fe"/>
+      <stop offset="1" stop-color="#8b7bff"/>
+    </linearGradient>
+    <style>
+      .card{fill:#131a2a;stroke:rgba(148,170,210,.18);}
+      .lbl{fill:#93a1bd;font-size:12px;}
+      .title{fill:#eef2f9;font-size:14px;font-weight:600;}
+      .sub{fill:#61708d;font-size:11px;}
+      .pill{fill:rgba(110,168,254,.14);stroke:rgba(110,168,254,.3);}
+      .pilltext{fill:#9cc0ff;font-size:11px;}
+      .flow{stroke:#3a4a6b;stroke-width:2;fill:none;marker-end:url(#arrow);}
+    </style>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L8,4.5 L0,9 Z" fill="#3a4a6b"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="460" fill="url(#bg)"/>
+  <rect x="28" y="26" width="220" height="34" rx="9" fill="url(#accent)"/>
+  <text x="44" y="48" fill="#060a14" font-size="15" font-weight="700">Gatehouse — Architecture</text>
+
+  <!-- Inputs -->
+  <text x="48" y="104" class="lbl">PIPELINE INPUT</text>
+  <g>
+    <rect class="card" x="40" y="116" width="180" height="56" rx="12"/>
+    <text x="58" y="142" class="title">GitHub Actions</text>
+    <text x="58" y="160" class="sub">workflow YAML</text>
+  </g>
+  <g>
+    <rect class="card" x="40" y="184" width="180" height="56" rx="12"/>
+    <text x="58" y="210" class="title">GitLab CI</text>
+    <text x="58" y="228" class="sub">.gitlab-ci.yml</text>
+  </g>
+  <g>
+    <rect class="card" x="40" y="252" width="180" height="56" rx="12"/>
+    <text x="58" y="278" class="title">Jenkinsfile</text>
+    <text x="58" y="296" class="sub">declarative / scripted</text>
+  </g>
+
+  <!-- Frontend -->
+  <text x="300" y="104" class="lbl">FRONTEND · Next.js</text>
+  <rect class="card" x="292" y="116" width="190" height="192" rx="14"/>
+  <text x="312" y="146" class="title">Analyzer dashboard</text>
+  <text x="312" y="168" class="sub">Editor · provider select</text>
+  <text x="312" y="186" class="sub">Score · severity breakdown</text>
+  <text x="312" y="204" class="sub">Findings · remediation</text>
+  <rect class="pill" x="312" y="222" width="92" height="22" rx="11"/>
+  <text x="324" y="237" class="pilltext">Rules</text>
+  <rect class="pill" x="312" y="252" width="110" height="22" rx="11"/>
+  <text x="324" y="267" class="pilltext">Examples</text>
+
+  <!-- Backend -->
+  <text x="560" y="104" class="lbl">BACKEND · FastAPI</text>
+  <rect class="card" x="552" y="116" width="200" height="192" rx="14"/>
+  <text x="572" y="146" class="title">Analysis engine</text>
+  <text x="572" y="168" class="sub">Parsers → normalized model</text>
+  <text x="572" y="186" class="sub">Rule registry (37 checks)</text>
+  <text x="572" y="204" class="sub">Scoring + grading</text>
+  <rect class="pill" x="572" y="222" width="160" height="22" rx="11"/>
+  <text x="584" y="237" class="pilltext">9 risk categories</text>
+  <rect class="pill" x="572" y="252" width="160" height="22" rx="11"/>
+  <text x="584" y="267" class="pilltext">AI provider (optional)</text>
+
+  <!-- Output -->
+  <text x="800" y="104" class="lbl">OUTPUT</text>
+  <rect class="card" x="792" y="116" width="140" height="192" rx="14"/>
+  <text x="812" y="146" class="title">Result JSON</text>
+  <text x="812" y="168" class="sub">score + grade</text>
+  <text x="812" y="186" class="sub">findings[]</text>
+  <text x="812" y="204" class="sub">severity counts</text>
+  <text x="812" y="222" class="sub">next steps</text>
+  <rect class="pill" x="812" y="244" width="104" height="22" rx="11"/>
+  <text x="824" y="259" class="pilltext">→ OpsDeck</text>
+
+  <!-- arrows -->
+  <path class="flow" d="M224 200 H286"/>
+  <path class="flow" d="M486 212 H546"/>
+  <path class="flow" d="M756 212 H786"/>
+
+  <text x="40" y="360" class="lbl">DETECTS</text>
+  <g class="sub" font-size="12" fill="#7d8db0">
+    <text x="40" y="386">Risky permissions</text>
+    <text x="180" y="386">Secret exposure</text>
+    <text x="320" y="386">Supply chain risk</text>
+    <text x="470" y="386">Trigger safety</text>
+    <text x="600" y="386">Deployment gates</text>
+    <text x="740" y="386">Runtime hardening</text>
+  </g>
+  <line x1="40" y1="404" x2="920" y2="404" stroke="rgba(148,170,210,.12)"/>
+  <text x="40" y="430" class="sub">Standalone product · integrates into the OpsDeck DevSecOps platform</text>
+</svg>

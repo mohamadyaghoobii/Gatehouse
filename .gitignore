@@ -14,3 +14,6 @@ coverage
 playwright-report
 test-results
 apps/web/tsconfig.tsbuildinfo
+.claude/
+.idea
+.vscode

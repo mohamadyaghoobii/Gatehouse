@@ -1,0 +1,23 @@
+name: deploy-on-pr
+on:
+  pull_request_target:
+  push:
+permissions: write-all
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Configure kube
+        run: echo "$KUBECONFIG_DATA" > kubeconfig.yaml
+        env:
+          KUBECONFIG_DATA: ${{ secrets.KUBECONFIG }}
+      - name: Ship to prod
+        run: kubectl apply -f k8s/
+      - uses: actions/upload-artifact@v3
+        with:
+          name: workspace
+          path: .
+          retention-days: 90

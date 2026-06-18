@@ -1,20 +1,22 @@
 {
   "name": "gatehouse-web",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start -H 0.0.0.0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install --with-deps chromium"
   },
   "dependencies": {
-    "@monaco-editor/react": "^4.6.0",
     "next": "14.2.22",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "1.49.1",
     "@types/node": "20.17.10",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",

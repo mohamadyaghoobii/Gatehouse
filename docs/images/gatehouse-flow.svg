@@ -1,18 +1,60 @@
-<svg width="1100" height="360" viewBox="0 0 1100 360" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1100" height="360" rx="28" fill="#070A12"/>
-  <g font-family="Inter,Arial" font-size="18" font-weight="700" fill="#F8FAFC">
-    <rect x="56" y="120" width="190" height="96" rx="22" fill="#101827" stroke="#243044"/>
-    <text x="93" y="174">Pipeline file</text>
-    <rect x="322" y="120" width="190" height="96" rx="22" fill="#101827" stroke="#243044"/>
-    <text x="372" y="174">Parser</text>
-    <rect x="588" y="120" width="190" height="96" rx="22" fill="#101827" stroke="#243044"/>
-    <text x="625" y="174">Rule engine</text>
-    <rect x="854" y="120" width="190" height="96" rx="22" fill="#101827" stroke="#243044"/>
-    <text x="895" y="174">Risk report</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 220" font-family="Inter, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="fbg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#070a11"/>
+    </linearGradient>
+    <linearGradient id="fa" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6ea8fe"/>
+      <stop offset="1" stop-color="#8b7bff"/>
+    </linearGradient>
+    <marker id="far" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+      <path d="M0,0 L8,5 L0,10 Z" fill="#42557d"/>
+    </marker>
+    <style>
+      .step{fill:#131a2a;stroke:rgba(148,170,210,.18);}
+      .n{fill:#6ea8fe;font-size:12px;font-weight:700;}
+      .t{fill:#eef2f9;font-size:14px;font-weight:600;}
+      .s{fill:#8a99b8;font-size:11px;}
+      .arrow{stroke:#42557d;stroke-width:2;fill:none;marker-end:url(#far);}
+    </style>
+  </defs>
+  <rect width="980" height="220" fill="url(#fbg)"/>
+  <rect x="26" y="22" width="6" height="30" rx="3" fill="url(#fa)"/>
+  <text x="44" y="44" fill="#eef2f9" font-size="16" font-weight="700">How an analysis runs</text>
+
+  <g>
+    <rect class="step" x="26" y="80" width="200" height="104" rx="14"/>
+    <text x="46" y="108" class="n">01</text>
+    <text x="46" y="132" class="t">Detect &amp; parse</text>
+    <text x="46" y="152" class="s">Identify the provider and</text>
+    <text x="46" y="168" class="s">build a normalized model.</text>
   </g>
-  <path d="M260 168h42" stroke="#88E0FF" stroke-width="4" stroke-linecap="round"/>
-  <path d="M526 168h42" stroke="#88E0FF" stroke-width="4" stroke-linecap="round"/>
-  <path d="M792 168h42" stroke="#88E0FF" stroke-width="4" stroke-linecap="round"/>
-  <text x="80" y="270" fill="#94A3B8" font-family="Inter,Arial" font-size="16">GitHub Actions · GitLab CI · Jenkins</text>
-  <text x="620" y="270" fill="#94A3B8" font-family="Inter,Arial" font-size="16">Permissions · Secrets · Supply chain · Release gates</text>
+  <path class="arrow" d="M232 132 H262"/>
+
+  <g>
+    <rect class="step" x="268" y="80" width="200" height="104" rx="14"/>
+    <text x="288" y="108" class="n">02</text>
+    <text x="288" y="132" class="t">Run rule engine</text>
+    <text x="288" y="152" class="s">37 checks across 9 risk</text>
+    <text x="288" y="168" class="s">categories, with line refs.</text>
+  </g>
+  <path class="arrow" d="M474 132 H504"/>
+
+  <g>
+    <rect class="step" x="510" y="80" width="200" height="104" rx="14"/>
+    <text x="530" y="108" class="n">03</text>
+    <text x="530" y="132" class="t">Score &amp; grade</text>
+    <text x="530" y="152" class="s">Weight by severity and</text>
+    <text x="530" y="168" class="s">confidence from 100.</text>
+  </g>
+  <path class="arrow" d="M716 132 H746"/>
+
+  <g>
+    <rect class="step" x="752" y="80" width="202" height="104" rx="14"/>
+    <text x="772" y="108" class="n">04</text>
+    <text x="772" y="132" class="t">Report</text>
+    <text x="772" y="152" class="s">Findings, remediation, and</text>
+    <text x="772" y="168" class="s">a stable JSON contract.</text>
+  </g>
 </svg>

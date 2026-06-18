@@ -3,14 +3,19 @@ services:
     build:
       context: ./apps/api
     environment:
-      GATEHOUSE_API_HOST: 0.0.0.0
-      GATEHOUSE_API_PORT: 8000
       CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
-      AI_PROVIDER: none
+      AI_PROVIDER: ${AI_PROVIDER:-none}
+      GATEHOUSE_EXAMPLES_DIR: /app/examples
     ports:
       - "8000:8000"
     volumes:
       - ./examples:/app/examples:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   web:
     build:
       context: ./apps/web
@@ -19,4 +24,5 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - api
+      api:
+        condition: service_healthy

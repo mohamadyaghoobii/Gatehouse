@@ -1,0 +1,38 @@
+pipeline {
+  agent { label 'linux' }
+  options {
+    timeout(time: 30, unit: 'MINUTES')
+  }
+  stages {
+    stage('Test') {
+      steps {
+        sh '''
+          set -euo pipefail
+          npm ci
+          npm run lint
+          npm test
+        '''
+      }
+    }
+    stage('Approve') {
+      steps {
+        input message: 'Deploy to production?', ok: 'Deploy'
+      }
+    }
+    stage('Deploy') {
+      steps {
+        withCredentials([string(credentialsId: 'deploy-token', variable: 'DEPLOY_TOKEN')]) {
+          sh './scripts/deploy.sh'
+        }
+      }
+    }
+  }
+  post {
+    failure {
+      mail to: 'team@example.com', subject: "Build failed: ${env.JOB_NAME}", body: 'See console output.'
+    }
+    always {
+      cleanWs()
+    }
+  }
+}

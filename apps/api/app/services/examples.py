@@ -1,116 +1,126 @@
+from __future__ import annotations
+
+import os
+from functools import lru_cache
+from pathlib import Path
+
 from app.schemas import ExampleInfo
 
-EXAMPLES = {
-    "github-actions-risky": ExampleInfo(
-        id="github-actions-risky",
-        title="Risky GitHub Actions deployment",
-        platform="github_actions",
-        description="Broad permissions, unpinned actions, remote script execution, and missing deployment gate.",
-        content='''name: risky-release
-on:
-  push:
-    branches: [main]
-permissions: write-all
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: docker/login-action@v2
-        with:
-          username: admin
-          password: super-secret-password
-      - name: Install deploy tool
-        run: curl -fsSL https://example.com/install.sh | bash
-      - name: Deploy
-        run: kubectl apply -f k8s/
-'''
-    ),
-    "github-actions-hardened": ExampleInfo(
-        id="github-actions-hardened",
-        title="Hardened GitHub Actions deployment",
-        platform="github_actions",
-        description="Read-only defaults, scoped write permission, pinned-style examples, timeout, and protected environment.",
-        content='''name: hardened-release
-on:
-  push:
-    branches: [main]
-permissions:
-  contents: read
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
-      - name: Test
-        run: npm ci && npm test
-  deploy:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    environment:
-      name: production
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
-      - name: Deploy
-        run: ./scripts/deploy.sh
-'''
-    ),
-    "gitlab-risky": ExampleInfo(
-        id="gitlab-risky",
-        title="Risky GitLab CI container deploy",
-        platform="gitlab_ci",
-        description="Docker-in-Docker, secret-like variables, and automated deploy behavior.",
-        content='''image: docker:latest
-services:
-  - docker:dind
-variables:
-  DEPLOY_TOKEN: hardcoded-token-value
-stages:
-  - build
-  - deploy
-build-image:
-  stage: build
-  script:
-    - docker login -u admin -p $DEPLOY_TOKEN registry.example.com
-    - docker build -t app:latest .
-deploy-prod:
-  stage: deploy
-  script:
-    - curl https://example.com/deploy.sh | sh
-'''
-    ),
-    "jenkins-risky": ExampleInfo(
-        id="jenkins-risky",
-        title="Risky Jenkinsfile deployment",
-        platform="jenkins",
-        description="Remote script execution and weak secret handling patterns.",
-        content='''pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      steps {
-        sh 'curl https://example.com/install.sh | bash'
-      }
-    }
-    stage('Deploy') {
-      steps {
-        sh 'DEPLOY_PASSWORD=hunter2 ./deploy.sh'
-      }
-    }
-  }
-}
-'''
-    )
-}
+_CATALOG = [
+    {
+        "id": "github-actions-risky",
+        "title": "Risky GitHub Actions release",
+        "platform": "github_actions",
+        "risk": "high",
+        "file": "github-actions-risky.yml",
+        "description": "write-all token, unpinned actions, inline password, and curl | bash on a deploy.",
+    },
+    {
+        "id": "github-actions-deploy-risky",
+        "title": "Unsafe pull_request_target deploy",
+        "platform": "github_actions",
+        "risk": "critical",
+        "file": "github-actions-deploy-risky.yml",
+        "description": "pull_request_target checks out fork code and deploys to production with broad tokens.",
+    },
+    {
+        "id": "github-actions-hardened",
+        "title": "Hardened GitHub Actions pipeline",
+        "platform": "github_actions",
+        "risk": "low",
+        "file": "github-actions-hardened.yml",
+        "description": "Read-only defaults, SHA-pinned actions, OIDC deploy, gated environment, and timeouts.",
+    },
+    {
+        "id": "secrets-leak-workflow",
+        "title": "Secret leakage workflow",
+        "platform": "github_actions",
+        "risk": "critical",
+        "file": "secrets-leak-workflow.yml",
+        "description": "Hardcoded keys, echoed secret, build-arg secret, and a .env artifact upload.",
+    },
+    {
+        "id": "supply-chain-risk-workflow",
+        "title": "Supply chain risk workflow",
+        "platform": "github_actions",
+        "risk": "high",
+        "file": "supply-chain-risk-workflow.yml",
+        "description": "Branch-pinned third-party actions, remote installers, and an unsigned image push.",
+    },
+    {
+        "id": "gitlab-risky",
+        "title": "Risky GitLab CI container deploy",
+        "platform": "gitlab_ci",
+        "risk": "high",
+        "file": "gitlab-risky.yml",
+        "description": "Docker-in-Docker, hardcoded token, password login, and curl | sh deploy.",
+    },
+    {
+        "id": "gitlab-hardened",
+        "title": "Hardened GitLab CI pipeline",
+        "platform": "gitlab_ci",
+        "risk": "low",
+        "file": "gitlab-hardened.yml",
+        "description": "Kaniko build, validated kubectl apply, manual gated production environment, and rules.",
+    },
+    {
+        "id": "jenkins-risky",
+        "title": "Risky Jenkinsfile deployment",
+        "platform": "jenkins",
+        "risk": "high",
+        "file": "Jenkinsfile.risky",
+        "description": "Remote script execution and a password handled outside withCredentials.",
+    },
+    {
+        "id": "jenkins-hardened",
+        "title": "Hardened Jenkinsfile",
+        "platform": "jenkins",
+        "risk": "low",
+        "file": "Jenkinsfile.hardened",
+        "description": "Fail-fast scripts, manual approval input, bound credentials, and post-failure handling.",
+    },
+]
+
+
+def _examples_dir() -> Path:
+    override = os.environ.get("GATEHOUSE_EXAMPLES_DIR")
+    candidates = [Path(override)] if override else []
+    here = Path(__file__).resolve()
+    candidates += [
+        Path("/app/examples"),
+        here.parents[3] / "examples",  # apps/api/app/services -> repo root
+        here.parents[4] / "examples",
+    ]
+    for path in candidates:
+        if path.is_dir():
+            return path
+    return candidates[-1]
+
+
+@lru_cache
+def _load() -> dict[str, ExampleInfo]:
+    directory = _examples_dir()
+    examples: dict[str, ExampleInfo] = {}
+    for entry in _CATALOG:
+        file_path = directory / entry["file"]
+        try:
+            content = file_path.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        examples[entry["id"]] = ExampleInfo(
+            id=entry["id"],
+            title=entry["title"],
+            platform=entry["platform"],
+            description=entry["description"],
+            risk=entry["risk"],
+            content=content,
+        )
+    return examples
 
 
 def list_examples() -> list[ExampleInfo]:
-    return list(EXAMPLES.values())
+    return list(_load().values())
 
 
 def get_example(example_id: str) -> ExampleInfo | None:
-    return EXAMPLES.get(example_id)
+    return _load().get(example_id)
